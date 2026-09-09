@@ -1,11 +1,13 @@
 extends Control
 
 const BACKDROP := preload("res://assets/art/soul_fall_judgment_v2.png")
+const SOUL_SHEET := preload("res://assets/art/souls/soul_codex_sheet_v1.png")
 
 var _list: VBoxContainer
 var _detail: Label
 var _release: Button
 var _selected_inventory_index := -1
+var _portrait: TextureRect
 
 func _ready() -> void:
 	var art := TextureRect.new()
@@ -42,6 +44,13 @@ func _ready() -> void:
 	_detail.add_theme_stylebox_override("normal", _frame())
 	_detail.text = "靈魂在第一次取得時揭示特質。\n\n選擇一個已發現的靈魂。"
 	add_child(_detail)
+	_portrait = TextureRect.new()
+	_portrait.position = Vector2(1030, 520)
+	_portrait.size = Vector2(190, 190)
+	_portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_portrait)
 	_release = Button.new()
 	_release.position = Vector2(730, 465)
 	_release.size = Vector2(240, 48)
@@ -68,6 +77,7 @@ func _build_list() -> void:
 
 func _select_soul(soul: Dictionary) -> void:
 	_selected_inventory_index = GameEngine.state.soul_inventory.find(String(soul.id))
+	_portrait.texture = _soul_texture(String(soul.id))
 	_detail.text = "%s\n\n%s靈魂 · %s傾向\n\n基礎回響：×%.1f\n\n%s" % [String(soul.name), String(soul.rarity), String(soul.aspect), float(soul.base_karma), "此靈魂正存放於容器中。" if _selected_inventory_index >= 0 else "已收入圖鑑，尚未存放。"]
 	_release.visible = _selected_inventory_index >= 0
 
@@ -78,6 +88,16 @@ func _release_selected() -> void:
 		_release.hide()
 		_selected_inventory_index = -1
 		_build_list()
+
+func _soul_texture(soul_id: String) -> Texture2D:
+	var ids := ["ember_memory", "waking_star", "mist_wanderer", "golden_vow", "mirror_oracle", "void_crown"]
+	var index := ids.find(soul_id)
+	if index < 0: return null
+	var texture := AtlasTexture.new()
+	var sheet_size := SOUL_SHEET.get_size()
+	texture.atlas = SOUL_SHEET
+	texture.region = Rect2(float(index % 3) * sheet_size.x / 3.0, float(index / 3) * sheet_size.y / 2.0, sheet_size.x / 3.0, sheet_size.y / 2.0)
+	return texture
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and (event.keycode == KEY_ESCAPE or event.keycode == KEY_I):

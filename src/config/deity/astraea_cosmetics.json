@@ -1,11 +1,11 @@
 [
-  {"id":"star_crystal","slot":"頭飾","name":"初始星晶","cost":0,"currency":"karma","oracle":"別急，星塵記得你的手勢。"},
-  {"id":"moon_crown","slot":"頭飾","name":"月冠","cost":180,"currency":"karma","oracle":"月光會替沉默的靈魂說話。"},
-  {"id":"void_veil","slot":"頭飾","name":"虛空面紗","cost":8,"currency":"fragments","oracle":"虛空不是盡頭，只是一扇還未命名的門。"},
-  {"id":"nebula_cloak","slot":"斗篷","name":"初始星雲","cost":0,"currency":"karma","oracle":"每一道偏移，都曾是某人的選擇。"},
-  {"id":"golden_vow_cloak","slot":"斗篷","name":"金誓長披","cost":12,"currency":"fragments","oracle":"誓言不會消失；它們只會成為星座。"},
-  {"id":"eclipse_raiment","slot":"斗篷","name":"日蝕羽衣","cost":3,"currency":"seals","oracle":"黑暗從不奪走星光，它只讓星光被看見。"},
-  {"id":"origin_chart","slot":"星盤","name":"原始星盤","cost":0,"currency":"karma","oracle":"你沒有失去靈魂；你只是送它回家。"},
-  {"id":"prism_chart","slot":"星盤","name":"稜鏡星盤","cost":320,"currency":"karma","oracle":"命運沒有直線，只有你肯否轉身。"},
-  {"id":"crown_chart","slot":"星盤","name":"冠冕星盤","cost":6,"currency":"seals","oracle":"冠冕留給願意承擔迴響的人。"}
+  {"id":"star_crystal","deity_id":"astraea","slot":"頭飾","name":"初始星晶","cost":0,"currency":"karma","oracle":"別急，星塵記得你的手勢。"},
+  {"id":"moon_crown","deity_id":"astraea","slot":"頭飾","name":"月冠","cost":180,"currency":"karma","oracle":"月光會替沉默的靈魂說話。"},
+  {"id":"void_veil","deity_id":"astraea","slot":"頭飾","name":"虛空面紗","cost":8,"currency":"fragments","oracle":"虛空不是盡頭，只是一扇還未命名的門。"},
+  {"id":"nebula_cloak","deity_id":"astraea","slot":"斗篷","name":"初始星雲","cost":0,"currency":"karma","oracle":"每一道偏移，都曾是某人的選擇。"},
+  {"id":"golden_vow_cloak","deity_id":"astraea","slot":"斗篷","name":"金誓長披","cost":12,"currency":"fragments","oracle":"誓言不會消失；它們只會成為星座。"},
+  {"id":"eclipse_raiment","deity_id":"astraea","slot":"斗篷","name":"日蝕羽衣","cost":3,"currency":"seals","oracle":"黑暗從不奪走星光，它只讓星光被看見。"},
+  {"id":"origin_chart","deity_id":"astraea","slot":"星盤","name":"原始星盤","cost":0,"currency":"karma","oracle":"你沒有失去靈魂；你只是送它回家。"},
+  {"id":"prism_chart","deity_id":"astraea","slot":"星盤","name":"稜鏡星盤","cost":320,"currency":"karma","oracle":"命運沒有直線，只有你肯否轉身。"},
+  {"id":"crown_chart","deity_id":"astraea","slot":"星盤","name":"冠冕星盤","cost":6,"currency":"seals","oracle":"冠冕留給願意承擔迴響的人。"}
 ]

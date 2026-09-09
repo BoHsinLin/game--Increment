@@ -7,6 +7,8 @@ func _init() -> void:
 	_test_buy_max()
 	_test_prestige_reward()
 	_test_number_formatter()
+	_test_deity_content()
+	_test_replayable_peg_simulation()
 	if failures == 0:
 		print("All AFTERLIFE INC. core tests passed.")
 	quit(failures)
@@ -32,3 +34,26 @@ func _test_prestige_reward() -> void:
 
 func _test_number_formatter() -> void:
 	_check(NumberFormatter.format(1250000.0) == "1.25M", "Formatter must abbreviate millions")
+
+func _test_deity_content() -> void:
+	var deities: Variant = ConfigLoader.load_json("res://src/config/deity/deities.json")
+	_check(deities is Array and deities.size() == 3, "Three selectable deities must be configured")
+	for config_path in ["res://src/config/deity/astraea_cosmetics.json", "res://src/config/deity/selene_cosmetics.json", "res://src/config/deity/orpheon_cosmetics.json"]:
+		var cosmetics: Variant = ConfigLoader.load_json(config_path)
+		_check(cosmetics is Array and cosmetics.size() == 9, "Each deity must have three complete cosmetic slots")
+	var migrated := SaveManager.migrate({"version": 1, "equipped_cosmetics": {"頭飾": "star_crystal"}})
+	_check(String(migrated.get("active_deity_id", "")) == "astraea", "Legacy saves must default to Astraea")
+	var migrated_equipment: Dictionary = migrated.get("equipped_cosmetics_by_deity", {})
+	var migrated_astraea: Dictionary = migrated_equipment.get("astraea", {})
+	_check(String(migrated_astraea.get("頭飾", "")) == "star_crystal", "Legacy Astraea equipment must migrate")
+	var fate_cards: Variant = ConfigLoader.load_json("res://src/config/fate_cards/fate_cards.json")
+	_check(fate_cards is Array and fate_cards.size() == 30, "v1.0 must provide thirty fate cards")
+	var souls: Variant = ConfigLoader.load_json("res://src/config/souls/souls.json")
+	_check(souls is Array and souls.size() == 6, "Soul codex must provide all six rarity entries")
+
+func _test_replayable_peg_simulation() -> void:
+	var first := ConstellationSimulator.simulate(42, 0.12, -0.08, 0.81)
+	var replay := ConstellationSimulator.simulate(42, 0.12, -0.08, 0.81)
+	_check(int(first.lane) == int(replay.lane), "A peg simulation seed must replay to the same gate")
+	_check(first.path == replay.path and first.impacts.size() == 12, "A peg simulation must preserve its complete impact path")
+	_check(int(first.lane) >= 0 and int(first.lane) <= 2, "A peg simulation must resolve to one of three gates")

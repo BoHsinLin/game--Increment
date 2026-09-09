@@ -1,0 +1,11 @@
+[
+  {"id":"orpheon_ember_mark","deity_id":"orpheon","slot":"頭飾","name":"初始冥星印","cost":0,"currency":"karma","oracle":"在最深的夜裡，方向仍是一種承諾。"},
+  {"id":"orpheon_iron_halo","deity_id":"orpheon","slot":"頭飾","name":"鐵星環","cost":260,"currency":"karma","oracle":"堅定不是沉重，是不再逃離。"},
+  {"id":"orpheon_ash_veil","deity_id":"orpheon","slot":"頭飾","name":"灰燼面紗","cost":10,"currency":"fragments","oracle":"灰燼知道，火焰從未真正離開。"},
+  {"id":"orpheon_night_coat","deity_id":"orpheon","slot":"斗篷","name":"初始夜行衣","cost":0,"currency":"karma","oracle":"靜默能把散落的星收回掌心。"},
+  {"id":"orpheon_comet_coat","deity_id":"orpheon","slot":"斗篷","name":"彗核長衣","cost":16,"currency":"fragments","oracle":"當你前行，連影子都會學會燃燒。"},
+  {"id":"orpheon_void_coat","deity_id":"orpheon","slot":"斗篷","name":"虛空大氅","cost":5,"currency":"seals","oracle":"虛空不索取答案；它等你說出名字。"},
+  {"id":"orpheon_iron_astrolabe","deity_id":"orpheon","slot":"星盤","name":"鐵質星盤","cost":0,"currency":"karma","oracle":"所有軌道，都有回望的時刻。"},
+  {"id":"orpheon_ember_astrolabe","deity_id":"orpheon","slot":"星盤","name":"餘燼星盤","cost":400,"currency":"karma","oracle":"別熄滅那一點；它足以辨認黎明。"},
+  {"id":"orpheon_crown_astrolabe","deity_id":"orpheon","slot":"星盤","name":"冥冠星盤","cost":8,"currency":"seals","oracle":"冠冕不是高度，而是你承受過的回聲。"}
+]

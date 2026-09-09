@@ -15,16 +15,11 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 
 func start(result: Dictionary) -> void:
-	var end_x: float = [0.31, 0.50, 0.69][int(result.lane)]
-	var rune_push := float(result.get("rune_push", 0.0))
-	var deflection := clampf(rune_push * 0.20, -0.10, 0.10)
-	# 每一段改變方向，讓光球真正經歷彈板而非直線消失。
-	_route = [
-		Vector2(0.50, 0.18), Vector2(0.46 + deflection, 0.30), Vector2(0.56 + deflection, 0.40),
-		Vector2((0.42 if int(result.lane) == 0 else 0.58) + deflection, 0.50),
-		Vector2(end_x + 0.05, 0.61), Vector2(end_x, 0.75)
-	]
-	_impacts = _route.slice(1, _route.size() - 1)
+	_route.clear()
+	for point: Variant in result.get("peg_path", []): _route.append(point)
+	_impacts.clear()
+	for point: Variant in result.get("peg_impacts", []): _impacts.append(point)
+	if _route.is_empty(): return
 	_elapsed = 0.0
 	_active = true
 	queue_redraw()

@@ -14,6 +14,9 @@ const CARD_PRISM := preload("res://assets/art/cards/card_prism_v1.png")
 const CARD_NOVA := preload("res://assets/art/cards/card_nova_v1.png")
 const CARD_WEAVER := preload("res://assets/art/cards/card_weaver_v1.png")
 const CARD_VOID_BLOOM := preload("res://assets/art/cards/card_void_bloom_v1.png")
+const EXPANSION_SHEET_A := preload("res://assets/art/cards/card_expansion_sheet_a_v1.png")
+const EXPANSION_SHEET_B := preload("res://assets/art/cards/card_expansion_sheet_b_v1.png")
+const EXPANSION_SHEET_C := preload("res://assets/art/cards/card_expansion_sheet_c_v1.png")
 
 var _grid: GridContainer
 var _detail: Label
@@ -110,7 +113,17 @@ func _texture_for(card_id: String) -> Texture2D:
 		"nova": return CARD_NOVA
 		"weaver": return CARD_WEAVER
 		"void_bloom": return CARD_VOID_BLOOM
+		"shattered_hour", "aurora_moth", "astral_compass", "mirror_moon", "eclipse_rose", "solar_reliquary": return _expansion_texture(EXPANSION_SHEET_A, ["shattered_hour", "aurora_moth", "astral_compass", "mirror_moon", "eclipse_rose", "solar_reliquary"].find(card_id))
+		"star_whale", "twin_masks", "galaxy_lantern", "jade_key", "comet_hand", "obsidian_crown": return _expansion_texture(EXPANSION_SHEET_B, ["star_whale", "twin_masks", "galaxy_lantern", "jade_key", "comet_hand", "obsidian_crown"].find(card_id))
+		"radiant_arch", "teal_flame", "stardust_fox", "constellation_bell", "crescent_wave", "galaxy_seed": return _expansion_texture(EXPANSION_SHEET_C, ["radiant_arch", "teal_flame", "stardust_fox", "constellation_bell", "crescent_wave", "galaxy_seed"].find(card_id))
 		_: return CARD_BACK
+
+func _expansion_texture(sheet: Texture2D, index: int) -> Texture2D:
+	var texture := AtlasTexture.new()
+	var sheet_size := sheet.get_size()
+	texture.atlas = sheet
+	texture.region = Rect2(float(index % 3) * sheet_size.x / 3.0, float(index / 3) * sheet_size.y / 2.0, sheet_size.x / 3.0, sheet_size.y / 2.0)
+	return texture
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and (event.keycode == KEY_ESCAPE or event.keycode == KEY_C):

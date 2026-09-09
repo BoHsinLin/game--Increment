@@ -15,6 +15,7 @@ var fate_card_options: Array = []
 var fate_cards: Array = []
 var rune_unlocks: Array = []
 var skill_nodes: Array = []
+var deities: Array = []
 var deity_cosmetics: Array = []
 var special_shop_items: Array = []
 var soul_catalog: Array = []
@@ -35,13 +36,17 @@ func _ready() -> void:
 	fate_cards = ConfigLoader.load_json("res://src/config/fate_cards/fate_cards.json")
 	rune_unlocks = ConfigLoader.load_json("res://src/config/fate_cards/rune_unlocks.json")
 	skill_nodes = ConfigLoader.load_json("res://src/config/skills/constellation_nodes.json")
-	deity_cosmetics = ConfigLoader.load_json("res://src/config/deity/astraea_cosmetics.json")
+	deities = ConfigLoader.load_json("res://src/config/deity/deities.json")
+	deity_cosmetics = []
+	for config_path in ["res://src/config/deity/astraea_cosmetics.json", "res://src/config/deity/selene_cosmetics.json", "res://src/config/deity/orpheon_cosmetics.json"]:
+		deity_cosmetics.append_array(ConfigLoader.load_json(config_path))
 	special_shop_items = ConfigLoader.load_json("res://src/config/shop/special_items.json")
 	soul_catalog = ConfigLoader.load_json("res://src/config/souls/souls.json")
 	state = _initial_state()
 	var loaded := SaveManager.load_game()
 	if not loaded.is_empty(): state.merge(loaded, true)
 	_ensure_content_state()
+	_apply_ui_scale()
 	_apply_offline_progress()
 	_begin_constellation_round()
 
@@ -71,15 +76,17 @@ func _initial_state() -> Dictionary:
 		"owned_fate_cards": ["starfall", "tide", "comet", "mercy", "echo", "aurora", "eclipse", "orbit", "prism", "nova"],
 		"soul_codex": ["ember_memory", "waking_star"], "soul_inventory": [], "soul_storage_capacity": 3,
 		"onboarding_step": 0, "rune_capacity": 3, "skill_nodes": {},
-		"owned_cosmetics": ["star_crystal", "nebula_cloak", "origin_chart"], "equipped_cosmetics": {"頭飾":"star_crystal", "斗篷":"nebula_cloak", "星盤":"origin_chart"},
+		"owned_cosmetics": ["star_crystal", "nebula_cloak", "origin_chart", "selene_moon_pin", "selene_silver_mantle", "selene_tide_orb", "orpheon_ember_mark", "orpheon_night_coat", "orpheon_iron_astrolabe"], "equipped_cosmetics": {"頭飾":"star_crystal", "斗篷":"nebula_cloak", "星盤":"origin_chart"}, "active_deity_id":"astraea", "equipped_cosmetics_by_deity":{"astraea":{"頭飾":"star_crystal", "斗篷":"nebula_cloak", "星盤":"origin_chart"}, "selene":{"頭飾":"selene_moon_pin", "斗篷":"selene_silver_mantle", "星盤":"selene_tide_orb"}, "orpheon":{"頭飾":"orpheon_ember_mark", "斗篷":"orpheon_night_coat", "星盤":"orpheon_iron_astrolabe"}},
 		"owned_shop_relics": [], "limited_items": {}, "next_round_karma_bonus": 0.0, "weekly_records": {}, "honor": 0, "unlocked_titles": ["新任引魂者"],
 		"settings": {"reduce_flashes": false, "ui_scale": 1.0, "tutorial_replay": false, "auto_ritual": false}
 	}
 
 func _ensure_content_state() -> void:
 	var defaults := _initial_state()
-	for key in ["soul_fragments", "destiny_seals", "owned_fate_cards", "soul_codex", "soul_inventory", "soul_storage_capacity", "onboarding_step", "rune_capacity", "skill_nodes", "owned_cosmetics", "equipped_cosmetics", "owned_shop_relics", "limited_items", "next_round_karma_bonus", "weekly_records", "honor", "unlocked_titles", "settings"]:
+	for key in ["soul_fragments", "destiny_seals", "owned_fate_cards", "soul_codex", "soul_inventory", "soul_storage_capacity", "onboarding_step", "rune_capacity", "skill_nodes", "owned_cosmetics", "equipped_cosmetics", "active_deity_id", "equipped_cosmetics_by_deity", "owned_shop_relics", "limited_items", "next_round_karma_bonus", "weekly_records", "honor", "unlocked_titles", "settings"]:
 		if not state.has(key): state[key] = defaults[key]
+	for cosmetic_id in ["selene_moon_pin", "selene_silver_mantle", "selene_tide_orb", "orpheon_ember_mark", "orpheon_night_coat", "orpheon_iron_astrolabe"]:
+		if not cosmetic_id in state.owned_cosmetics: state.owned_cosmetics.append(cosmetic_id)
 
 func _tick(delta: float) -> void:
 	_advance_judgement(delta)
@@ -165,10 +172,8 @@ func launch_constellation_orb(is_automated := false) -> Dictionary:
 		rune_push /= float(rune_locks.size())
 	precision = clampf(precision + get_skill_bonus("precision"), 0.0, 1.0)
 	rune_push *= 1.0 + get_skill_bonus("rune_push")
-	var bias := float(selected_fate_card.get("bias", 0.0))
-	# 鎖在環線左／右側的浮文會直接推動落珠傾向；精準度仍決定獎勵品質。
-	var path := clampf(0.5 + bias + rune_push * 0.42 + (precision - 0.5) * 0.35 + _judgement_rng.randf_range(-0.22, 0.22), 0.0, 1.0)
-	var lane := 0 if path < 0.333 else (1 if path < 0.666 else 2)
+	var simulation := ConstellationSimulator.simulate(_judgement_rng.randi(), float(selected_fate_card.get("bias", 0.0)), rune_push, precision)
+	var lane := int(simulation.lane)
 	var base := 0.35 + precision * 1.65
 	var reward := base * float(selected_fate_card.get("multiplier", 1.0)) * (1.0 + get_skill_bonus("karma_mult") + float(state.next_round_karma_bonus))
 	if lane == 1: reward *= 1.35 + get_skill_bonus("center_bonus")
@@ -194,7 +199,7 @@ func launch_constellation_orb(is_automated := false) -> Dictionary:
 	state.souls = maxf(state.souls - 1.0, 0.0)
 	state.next_round_karma_bonus = 0.0
 	judgement_combo = judgement_combo + 1 if precision >= 0.7 else 0
-	var result := {"result": "launched", "automated": is_automated, "lane": lane, "reward": reward, "fragments": fragments, "soul": acquired_soul, "soul_stored": stored_soul, "precision": precision, "rune_push": rune_push, "card": selected_fate_card.name, "multiplier": selected_fate_card.multiplier}
+	var result := {"result": "launched", "automated": is_automated, "lane": lane, "reward": reward, "fragments": fragments, "soul": acquired_soul, "soul_stored": stored_soul, "precision": precision, "rune_push": rune_push, "card": selected_fate_card.name, "multiplier": selected_fate_card.multiplier, "peg_seed": simulation.seed, "peg_path": simulation.path, "peg_impacts": simulation.impacts}
 	result.weekly = record_weekly_result(reward, precision)
 	_begin_constellation_round()
 	EventBus.state_changed.emit()
@@ -319,6 +324,26 @@ func get_deity_cosmetic(cosmetic_id: String) -> Dictionary:
 		if String(cosmetic.get("id", "")) == cosmetic_id: return cosmetic
 	return {}
 
+func get_deity(deity_id: String) -> Dictionary:
+	for deity: Dictionary in deities:
+		if String(deity.get("id", "")) == deity_id: return deity
+	return {}
+
+func get_active_deity() -> Dictionary:
+	return get_deity(String(state.get("active_deity_id", "astraea")))
+
+func select_deity(deity_id: String) -> bool:
+	if get_deity(deity_id).is_empty(): return false
+	state.active_deity_id = deity_id
+	save()
+	EventBus.state_changed.emit()
+	return true
+
+func get_equipped_cosmetic(deity_id: String, slot: String) -> String:
+	var equipped_by_deity: Dictionary = state.get("equipped_cosmetics_by_deity", {})
+	var equipped: Dictionary = equipped_by_deity.get(deity_id, {})
+	return String(equipped.get(slot, ""))
+
 func owns_deity_cosmetic(cosmetic_id: String) -> bool:
 	return cosmetic_id in state.get("owned_cosmetics", [])
 
@@ -338,7 +363,10 @@ func unlock_or_equip_cosmetic(cosmetic_id: String) -> Dictionary:
 				if float(state.karma) < cost: return {"result": "insufficient"}
 				state.karma -= cost
 		state.owned_cosmetics.append(cosmetic_id)
-	state.equipped_cosmetics[String(cosmetic.slot)] = cosmetic_id
+	var deity_id := String(cosmetic.get("deity_id", "astraea"))
+	if not state.equipped_cosmetics_by_deity.has(deity_id): state.equipped_cosmetics_by_deity[deity_id] = {}
+	state.equipped_cosmetics_by_deity[deity_id][String(cosmetic.slot)] = cosmetic_id
+	if deity_id == "astraea": state.equipped_cosmetics[String(cosmetic.slot)] = cosmetic_id
 	save()
 	EventBus.state_changed.emit()
 	return {"result": "equipped", "cosmetic": cosmetic}
@@ -432,8 +460,12 @@ func set_onboarding_step(step: int) -> void:
 
 func update_setting(key: String, value: Variant) -> void:
 	state.settings[key] = value
+	if key == "ui_scale": _apply_ui_scale()
 	save()
 	EventBus.state_changed.emit()
+
+func _apply_ui_scale() -> void:
+	get_window().content_scale_factor = clampf(float(state.get("settings", {}).get("ui_scale", 1.0)), 0.9, 1.2)
 
 func replay_first_soul_tutorial() -> void:
 	state.onboarding_step = 1

@@ -1,0 +1,11 @@
+[
+  {"id":"selene_moon_pin","deity_id":"selene","slot":"頭飾","name":"初始月針","cost":0,"currency":"karma","oracle":"月光會替沉默的靈魂說話。"},
+  {"id":"selene_tidal_crown","deity_id":"selene","slot":"頭飾","name":"潮汐月冠","cost":220,"currency":"karma","oracle":"潮汐從不催促，它只記得回來。"},
+  {"id":"selene_pearl_veil","deity_id":"selene","slot":"頭飾","name":"珠光面紗","cost":9,"currency":"fragments","oracle":"每一顆珍珠，都曾在黑暗裡練習發亮。"},
+  {"id":"selene_silver_mantle","deity_id":"selene","slot":"斗篷","name":"銀潮披肩","cost":0,"currency":"karma","oracle":"靜水也能帶領迷途的星。"},
+  {"id":"selene_lunar_bloom","deity_id":"selene","slot":"斗篷","name":"月華羽衣","cost":14,"currency":"fragments","oracle":"讓溫柔成為你最準確的引力。"},
+  {"id":"selene_eclipse_shawl","deity_id":"selene","slot":"斗篷","name":"暗月帔巾","cost":4,"currency":"seals","oracle":"被遮住的光，仍在替你照路。"},
+  {"id":"selene_tide_orb","deity_id":"selene","slot":"星盤","name":"潮汐靈球","cost":0,"currency":"karma","oracle":"命運聽得見最細小的波紋。"},
+  {"id":"selene_mirror_orb","deity_id":"selene","slot":"星盤","name":"鏡月靈球","cost":360,"currency":"karma","oracle":"映照不是重複，而是理解。"},
+  {"id":"selene_pearl_orb","deity_id":"selene","slot":"星盤","name":"珍珠靈球","cost":7,"currency":"seals","oracle":"留給明天的，是一枚完整的月。"}
+]

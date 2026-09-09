@@ -23,5 +23,8 @@ static func migrate(data: Dictionary) -> Dictionary:
 	if version < 1:
 		data["total_souls_processed"] = data.get("total_souls_processed", 0.0)
 		data["version"] = 1
+	if version < 2:
+		data["active_deity_id"] = data.get("active_deity_id", "astraea")
+		data["equipped_cosmetics_by_deity"] = data.get("equipped_cosmetics_by_deity", {"astraea": data.get("equipped_cosmetics", {})})
+		data["version"] = 2
 	return data
-
