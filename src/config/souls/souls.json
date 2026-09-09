@@ -1,0 +1,8 @@
+[
+  {"id":"ember_memory","name":"餘燼記憶","aspect":"記憶","rarity":"常見","color":"#8be8ff","base_karma":1.0},
+  {"id":"waking_star","name":"初醒星民","aspect":"星辰","rarity":"常見","color":"#f4d879","base_karma":1.1},
+  {"id":"mist_wanderer","name":"霧中旅者","aspect":"混沌","rarity":"罕見","color":"#c7a6ff","base_karma":1.5},
+  {"id":"golden_vow","name":"金誓之魂","aspect":"秩序","rarity":"罕見","color":"#ffd36f","base_karma":1.8},
+  {"id":"mirror_oracle","name":"鏡界先知","aspect":"記憶","rarity":"史詩","color":"#66fff1","base_karma":2.8},
+  {"id":"void_crown","name":"虛空冠冕","aspect":"混沌","rarity":"傳說","color":"#c08cff","base_karma":4.5}
+]

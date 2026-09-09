@@ -1,0 +1,14 @@
+[
+  {"id":"starfall","name":"星瀑折射","detail":"中央星屑彈板發亮，業力 +25%。","bias":0.00,"multiplier":1.25,"fragment_chance":0.00,"cost":0,"rune_route":"circle"},
+  {"id":"tide","name":"月潮偏移","detail":"預測軌跡偏向青綠碎片閘門。","bias":-0.22,"multiplier":1.00,"fragment_chance":0.04,"cost":0,"rune_route":"circle"},
+  {"id":"comet","name":"彗星偏移","detail":"預測軌跡偏向紫羅蘭命運閘門。","bias":0.22,"multiplier":1.00,"fragment_chance":0.02,"cost":0,"rune_route":"star"},
+  {"id":"mercy","name":"寬恕星環","detail":"失誤仍會留下更多業力殘響。","bias":0.00,"multiplier":1.08,"fragment_chance":0.00,"cost":0,"rune_route":"circle"},
+  {"id":"echo","name":"記憶回響","detail":"精準節印會被雙重放大。","bias":0.00,"multiplier":1.40,"fragment_chance":0.00,"cost":0,"rune_route":"figure_eight"},
+  {"id":"aurora","name":"極光帷幕","detail":"浮文軌跡更慢，鎖定容錯提高。","bias":-0.06,"multiplier":1.12,"fragment_chance":0.02,"cost":0,"rune_route":"figure_eight"},
+  {"id":"eclipse","name":"日蝕之門","detail":"右側命運閘門的稀有掉落提高。","bias":0.18,"multiplier":1.10,"fragment_chance":0.06,"cost":0,"rune_route":"circle"},
+  {"id":"orbit","name":"雙星軌道","detail":"完美節印後，中央落點的倍率提高。","bias":0.00,"multiplier":1.18,"fragment_chance":0.03,"cost":0,"rune_route":"figure_eight"},
+  {"id":"prism","name":"靈光稜鏡","detail":"每次碰撞映射出額外的業力。","bias":0.00,"multiplier":1.16,"fragment_chance":0.01,"cost":0,"rune_route":"star"},
+  {"id":"nova","name":"微型新星","detail":"落珠終點爆發，總業力 +30%。","bias":0.00,"multiplier":1.30,"fragment_chance":0.00,"cost":0,"rune_route":"star"},
+  {"id":"weaver","name":"命線編織","detail":"越接近預測線，節印倍率越高。","bias":0.08,"multiplier":1.22,"fragment_chance":0.03,"cost":120},
+  {"id":"void_bloom","name":"虛空花開","detail":"碎片閘門偶爾開出雙份靈魂碎片。","bias":-0.18,"multiplier":1.08,"fragment_chance":0.10,"cost":240}
+]

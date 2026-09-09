@@ -1,0 +1,9 @@
+[
+  {"id":"sharper_stamp","name_key":"UPGRADE_SHARPER_STAMP","description_key":"UPGRADE_SHARPER_STAMP_DESC","cost":100.0,"target":"click","target_id":"","multiplier":3.0},
+  {"id":"reaper_manual","name_key":"UPGRADE_REAPER_MANUAL","description_key":"UPGRADE_REAPER_MANUAL_DESC","cost":750.0,"target":"generator","target_id":"intern_reaper","multiplier":2.0},
+  {"id":"queue_forms","name_key":"UPGRADE_QUEUE_FORMS","description_key":"UPGRADE_QUEUE_FORMS_DESC","cost":3500.0,"target":"global","target_id":"","multiplier":1.5},
+  {"id":"balanced_scales","name_key":"UPGRADE_BALANCED_SCALES","description_key":"UPGRADE_BALANCED_SCALES_DESC","cost":12000.0,"target":"generator","target_id":"judge","multiplier":2.0},
+  {"id":"memory_erasers","name_key":"UPGRADE_MEMORY_ERASERS","description_key":"UPGRADE_MEMORY_ERASERS_DESC","cost":65000.0,"target":"generator","target_id":"reincarnation_clerk","multiplier":2.0},
+  {"id":"cosmic_kpi","name_key":"UPGRADE_COSMIC_KPI","description_key":"UPGRADE_COSMIC_KPI_DESC","cost":250000.0,"target":"global","target_id":"","multiplier":2.0}
+]
+

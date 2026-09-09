@@ -1,0 +1,7 @@
+[
+  {"id":"weaver","type":"card","name":"命線編織","detail":"永久命運牌：越接近預測線，節印倍率越高。","karma":120,"fragments":0,"seals":0},
+  {"id":"void_bloom","type":"card","name":"虛空花開","detail":"永久命運牌：碎片閘門偶爾開出雙份靈魂碎片。","karma":240,"fragments":0,"seals":0},
+  {"id":"astral_satchel","type":"relic","name":"星塵容器","detail":"永久擴張背包容量 +1。","karma":350,"fragments":6,"seals":0,"effect":"storage","value":1},
+  {"id":"fate_lens","type":"relic","name":"命運透鏡","detail":"永久提升掉落碎片機率。","karma":500,"fragments":4,"seals":1,"effect":"fragment_chance","value":0.025},
+  {"id":"nova_writ","type":"limited","name":"新星諭令","detail":"一次性：下一局結算業力額外 +35%。","karma":800,"fragments":0,"seals":2,"effect":"next_round_karma","value":0.35}
+]

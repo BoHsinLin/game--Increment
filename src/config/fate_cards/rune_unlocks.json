@@ -1,0 +1,8 @@
+[
+  {"capacity": 3, "cost_destiny_seals": 0, "name": "初始節印"},
+  {"capacity": 4, "cost_destiny_seals": 1, "name": "第四環"},
+  {"capacity": 5, "cost_destiny_seals": 2, "name": "第五環"},
+  {"capacity": 6, "cost_destiny_seals": 4, "name": "第六環"},
+  {"capacity": 7, "cost_destiny_seals": 7, "name": "第七環"},
+  {"capacity": 8, "cost_destiny_seals": 11, "name": "第八環"}
+]

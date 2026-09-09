@@ -1,0 +1,41 @@
+keys,en,zh_TW
+GAME_TITLE,AFTERLIFE INC.,死後管理局
+KARMA,Karma,業力
+KARMA_RATE,Karma income,業力收入
+SOUL_BACKLOG,Soul backlog,待處理靈魂
+INCOMING_SOULS,Incoming souls,靈魂流入
+PROCESSING_CAPACITY,Capacity,處理能力
+MANUAL_PROCESSING,Manual processing,手動處理
+JUDGE_SOUL,JUDGE,審判
+JUDGE_HINT,Process one soul and issue one unit of Karma.,處理一個靈魂並核發一份業力。
+DEPARTMENTS,Departments,部門
+UPGRADES,Procurement,採購升級
+BUY_AMOUNT,Buy %d,購買 %d
+BUY_MAX,Buy Max,購買最大
+REINCARNATE_BUTTON,Reincarnate universe (+%d Samsara),宇宙輪迴（+%d 輪迴點）
+QUEUE_OVERLOAD,⚠ Queue overload. Approve more staffing.,⚠ 靈魂爆單。請核准更多人力。
+QUEUE_STABLE,Queue throughput is within regulation.,目前處理量符合宇宙規章。
+TOAST_JUDGED,+%s Karma — Form A-01 approved.,+%s 業力——A-01 表單核准。
+TOAST_DEPARTMENT_EXPANDED,%d new positions approved.,已核准 %d 個新職缺。
+TOAST_UPGRADE_APPROVED,Procurement request approved.,採購申請已核准。
+TOAST_REINCARNATED,Big Bang authorized. +%d Samsara.,大霹靂已核准。+%d 輪迴點。
+FOOTER_TEXT,All deaths must be filed before the end of eternity.,所有死亡案件須於永恆結束前完成歸檔。
+GENERATOR_INTERN_REAPER,Intern Reaper,實習死神
+GENERATOR_INTERN_REAPER_DESC,Entry-level soul processing.,基層靈魂處理人員。
+GENERATOR_JUDGE,Cosmic Judge,宇宙審判官
+GENERATOR_JUDGE_DESC,Audits Karma at scale.,大規模稽核善惡業力。
+GENERATOR_REINCARNATION_CLERK,Reincarnation Clerk,輪迴處理員
+GENERATOR_REINCARNATION_CLERK_DESC,Returns souls to the living queue.,將靈魂送回生命佇列。
+UPGRADE_SHARPER_STAMP,Sharper Stamp,銳利核准章
+UPGRADE_SHARPER_STAMP_DESC,Manual judgment ×3,手動審判 ×3
+UPGRADE_REAPER_MANUAL,Reaper Handbook,死神工作手冊
+UPGRADE_REAPER_MANUAL_DESC,Intern Reaper ×2,實習死神 ×2
+UPGRADE_QUEUE_FORMS,Pre-filled Forms,預填表單
+UPGRADE_QUEUE_FORMS_DESC,Global production ×1.5,全域產量 ×1.5
+UPGRADE_BALANCED_SCALES,Balanced Scales,校準天秤
+UPGRADE_BALANCED_SCALES_DESC,Cosmic Judge ×2,宇宙審判官 ×2
+UPGRADE_MEMORY_ERASERS,Memory Erasers,記憶清除器
+UPGRADE_MEMORY_ERASERS_DESC,Reincarnation Clerk ×2,輪迴處理員 ×2
+UPGRADE_COSMIC_KPI,Cosmic KPI,宇宙績效指標
+UPGRADE_COSMIC_KPI_DESC,Global production ×2,全域產量 ×2
+

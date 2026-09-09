@@ -1,0 +1,36 @@
+[
+  {
+    "id": "intern_reaper",
+    "name_key": "GENERATOR_INTERN_REAPER",
+    "description_key": "GENERATOR_INTERN_REAPER_DESC",
+    "base_cost": 10.0,
+    "cost_growth": 1.15,
+    "soul_processing": 1.0,
+    "karma_production": 1.0,
+    "unlock_karma": 0.0,
+    "milestones": [{"amount": 10, "multiplier": 2.0}, {"amount": 25, "multiplier": 2.0}, {"amount": 50, "multiplier": 3.0}]
+  },
+  {
+    "id": "judge",
+    "name_key": "GENERATOR_JUDGE",
+    "description_key": "GENERATOR_JUDGE_DESC",
+    "base_cost": 500.0,
+    "cost_growth": 1.17,
+    "soul_processing": 12.0,
+    "karma_production": 15.0,
+    "unlock_karma": 250.0,
+    "milestones": [{"amount": 10, "multiplier": 2.0}, {"amount": 25, "multiplier": 2.5}, {"amount": 50, "multiplier": 3.0}]
+  },
+  {
+    "id": "reincarnation_clerk",
+    "name_key": "GENERATOR_REINCARNATION_CLERK",
+    "description_key": "GENERATOR_REINCARNATION_CLERK_DESC",
+    "base_cost": 15000.0,
+    "cost_growth": 1.19,
+    "soul_processing": 125.0,
+    "karma_production": 180.0,
+    "unlock_karma": 7500.0,
+    "milestones": [{"amount": 10, "multiplier": 2.0}, {"amount": 25, "multiplier": 3.0}, {"amount": 50, "multiplier": 4.0}]
+  }
+]
+
