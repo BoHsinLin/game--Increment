@@ -72,7 +72,9 @@ func _select(item: Dictionary) -> void:
 	_selected = item
 	_detail.text = "%s\n\n%s\n\n%s" % [String(item.name), String(item.detail), _cost_text(item)]
 	_buy.text = "取得此物"
-	_buy.disabled = not _can_afford(item)
+	var sold_out := String(item.get("type", "")) == "limited" and not GameEngine.is_limited_shop_item_available(String(item.id))
+	_buy.disabled = not _can_afford(item) or sold_out
+	if sold_out: _buy.text = "本輪已售罄"
 	_buy.show()
 
 func _buy_selected() -> void:
@@ -84,6 +86,9 @@ func _buy_selected() -> void:
 		_build_offers()
 	elif String(result.result) == "owned":
 		_detail.text = "這件物品已在你的收藏中。"
+		_buy.hide()
+	elif String(result.result) == "sold_out":
+		_detail.text = "這份限定諭令已在本輪售罄。"
 		_buy.hide()
 
 func _can_afford(item: Dictionary) -> bool:

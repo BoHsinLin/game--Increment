@@ -82,10 +82,10 @@ func _select_card(card: Dictionary) -> void:
 	_selected = card
 	var owned := GameEngine.owns_fate_card(String(card.id))
 	if owned:
-		_detail.text = "%s\n\n%s\n\n已永久收藏" % [card.name, card.detail]
+		_detail.text = "%s  ·  %s\n\n%s\n\n已永久收藏" % [card.name, GameEngine.get_fate_card_rarity(card), card.detail]
 		_purchase.hide()
 	else:
-		_detail.text = "未揭示的命運\n\n購買後才會讀取此卡的星象規則。"
+		_detail.text = "未揭示的命運  ·  %s\n\n購買後才會讀取此卡的星象規則。" % GameEngine.get_fate_card_rarity(card)
 		_purchase.text = "以 %s 業力取得" % NumberFormatter.format(float(card.cost))
 		_purchase.disabled = GameEngine.state.karma < float(card.cost)
 		_purchase.show()

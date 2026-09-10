@@ -244,6 +244,16 @@ func get_fate_card(card_id: String) -> Dictionary:
 func owns_fate_card(card_id: String) -> bool:
 	return card_id in state.get("owned_fate_cards", [])
 
+func get_fate_card_rarity(card: Dictionary) -> String:
+	# 舊存檔與第一批卡牌沒有稀有度欄位；以價格維持可預期的回溯分類。
+	var configured := String(card.get("rarity", ""))
+	if not configured.is_empty(): return configured
+	var cost := float(card.get("cost", 0.0))
+	if cost <= 0.0: return "常見"
+	if cost < 700.0: return "罕見"
+	if cost < 1400.0: return "史詩"
+	return "傳說"
+
 func get_soul(soul_id: String) -> Dictionary:
 	for soul: Dictionary in soul_catalog:
 		if String(soul.get("id", "")) == soul_id: return soul
@@ -378,7 +388,16 @@ func get_special_shop_offers() -> Dictionary:
 		if special_shop_items.is_empty(): break
 		offers.append(special_shop_items[(bucket + offset * 2) % special_shop_items.size()])
 	var seconds_remaining := 1200 - int(Time.get_unix_time_from_system()) % 1200
-	return {"offers": offers, "seconds_remaining": seconds_remaining}
+	return {"offers": offers, "seconds_remaining": seconds_remaining, "offer_cycle": bucket}
+
+func is_special_shop_offer(item_id: String) -> bool:
+	for offer: Dictionary in get_special_shop_offers().offers:
+		if String(offer.get("id", "")) == item_id: return true
+	return false
+
+func is_limited_shop_item_available(item_id: String) -> bool:
+	var cycle := int(get_special_shop_offers().offer_cycle)
+	return int(state.get("limited_items", {}).get(item_id, -1)) != cycle
 
 func get_shop_relic_bonus(effect: String) -> float:
 	var total := 0.0
@@ -419,8 +438,10 @@ func buy_special_shop_item(item_id: String) -> Dictionary:
 	for candidate: Dictionary in special_shop_items:
 		if String(candidate.get("id", "")) == item_id: item = candidate
 	if item.is_empty(): return {"result": "missing"}
+	if not is_special_shop_offer(item_id): return {"result": "not_offered"}
 	if String(item.type) == "card" and owns_fate_card(item_id): return {"result": "owned"}
 	if String(item.type) == "relic" and item_id in state.owned_shop_relics: return {"result": "owned"}
+	if String(item.type) == "limited" and not is_limited_shop_item_available(item_id): return {"result": "sold_out"}
 	if state.karma < float(item.karma) or int(state.soul_fragments) < int(item.fragments) or int(state.destiny_seals) < int(item.seals): return {"result": "insufficient"}
 	state.karma -= float(item.karma)
 	state.soul_fragments -= int(item.fragments)
@@ -430,7 +451,9 @@ func buy_special_shop_item(item_id: String) -> Dictionary:
 		"relic":
 			state.owned_shop_relics.append(item_id)
 			if String(item.effect) == "storage": state.soul_storage_capacity += int(item.value)
-		"limited": state.next_round_karma_bonus += float(item.value)
+		"limited":
+			state.next_round_karma_bonus += float(item.value)
+			state.limited_items[item_id] = int(get_special_shop_offers().offer_cycle)
 	save()
 	EventBus.state_changed.emit()
 	return {"result": "purchased", "item": item}
