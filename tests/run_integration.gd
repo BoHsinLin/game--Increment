@@ -12,6 +12,7 @@ func _ready() -> void:
 	_original_shop_items = GameEngine.special_shop_items.duplicate(true)
 	_test_first_soul_round()
 	await _test_card_reveal_survives_ui_refresh()
+	await _test_interface_scene_smoke()
 	_test_reincarnated_alignment_round()
 	_test_limited_shop_cycle()
 	GameEngine.state = _original_state
@@ -51,6 +52,21 @@ func _test_card_reveal_survives_ui_refresh() -> void:
 	await get_tree().create_timer(0.42).timeout
 	_check(not GameEngine.selected_fate_card.is_empty(), "A card reveal must survive a UI refresh and select its rule")
 	screen.queue_free()
+
+func _test_interface_scene_smoke() -> void:
+	for scene_path in [
+		"res://scenes/landing.tscn", "res://scenes/main_game.tscn", "res://scenes/fate_collection.tscn",
+		"res://scenes/soul_codex.tscn", "res://scenes/skill_constellation.tscn", "res://scenes/deity_wardrobe.tscn",
+		"res://scenes/special_shop.tscn", "res://scenes/weekly_challenge.tscn", "res://scenes/settings_screen.tscn"
+	]:
+		_fresh_round()
+		var packed := load(scene_path) as PackedScene
+		var screen := packed.instantiate()
+		add_child(screen)
+		await get_tree().process_frame
+		_check(screen.is_inside_tree(), "Interface scene must load: %s" % scene_path)
+		screen.queue_free()
+		await get_tree().process_frame
 
 func _test_reincarnated_alignment_round() -> void:
 	_fresh_round()

@@ -65,7 +65,7 @@ func _build_list() -> void:
 	for soul_id in GameEngine.state.soul_codex:
 		var soul := GameEngine.get_soul(String(soul_id))
 		if soul.is_empty(): continue
-		var count := GameEngine.state.soul_inventory.count(String(soul_id))
+		var count: int = GameEngine.state.soul_inventory.count(String(soul_id))
 		var button := Button.new()
 		button.flat = true
 		button.custom_minimum_size.y = 62

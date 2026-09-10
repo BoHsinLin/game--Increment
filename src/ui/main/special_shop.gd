@@ -62,7 +62,7 @@ func _build_offers() -> void:
 		button.flat = true
 		button.custom_minimum_size.y = 112
 		button.text = "✦  %s\n%s" % [String(item.name), _cost_text(item)]
-		button.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.add_theme_font_size_override("font_size", 19)
 		button.add_theme_color_override("font_color", Color("f2c663"))
 		button.pressed.connect(_select.bind(item))
