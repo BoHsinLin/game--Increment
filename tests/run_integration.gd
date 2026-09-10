@@ -13,6 +13,7 @@ func _ready() -> void:
 	_original_state = GameEngine.state.duplicate(true)
 	_original_shop_items = GameEngine.special_shop_items.duplicate(true)
 	_test_first_soul_round()
+	await _test_rune_overlay_visibility()
 	await _test_card_reveal_survives_ui_refresh()
 	await _test_three_complete_visible_rounds()
 	await _test_interface_scene_smoke()
@@ -40,6 +41,21 @@ func _test_first_soul_round() -> void:
 	_check(String(result.result) == "launched", "First-soul flow must launch immediately after card confirmation")
 	_check(float(GameEngine.state.karma) > before_karma, "First-soul flow must grant karma")
 	_check(result.get("peg_path", []).size() == 14 and result.get("peg_impacts", []).size() == 12, "A launched soul must contain a complete peg replay")
+
+func _test_rune_overlay_visibility() -> void:
+	_fresh_round()
+	var screen: Control = MAIN_GAME_SCRIPT.new()
+	add_child(screen)
+	await get_tree().process_frame
+	_check(not screen.rune_timing_game.visible, "The rune overlay must not distract from the first-soul screen")
+	GameEngine.state.prestige_count = 1
+	GameEngine._begin_constellation_round()
+	GameEngine.select_fate_card(0)
+	GameEngine.confirm_revealed_card()
+	screen.refresh()
+	_check(screen.rune_timing_game.visible, "The rune overlay must appear only when a reincarnated player can use it")
+	screen.queue_free()
+	await get_tree().process_frame
 
 func _test_card_reveal_survives_ui_refresh() -> void:
 	_fresh_round()

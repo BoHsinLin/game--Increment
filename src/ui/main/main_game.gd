@@ -30,6 +30,7 @@ var timing_status: Label
 var round_label: Label
 var rune_unlock_button: Button
 var card_bar: HBoxContainer
+var rune_timing_game: Control
 var _ui_elapsed := 0.0
 var _drop_active := false
 var _card_reveal_pending := false
@@ -88,13 +89,14 @@ func _build_interface() -> void:
 	rune_unlock_button.pressed.connect(_unlock_next_rune)
 	hud.add_child(rune_unlock_button)
 
-	var timing_game: Control = TIMING_GAME_SCRIPT.new()
-	timing_game.set_anchors_preset(Control.PRESET_FULL_RECT)
-	timing_game.offset_left = 150
-	timing_game.offset_top = 105
-	timing_game.offset_right = -235
-	timing_game.offset_bottom = -170
-	hud.add_child(timing_game)
+	rune_timing_game = TIMING_GAME_SCRIPT.new()
+	rune_timing_game.set_anchors_preset(Control.PRESET_FULL_RECT)
+	rune_timing_game.offset_left = 150
+	rune_timing_game.offset_top = 105
+	rune_timing_game.offset_right = -235
+	rune_timing_game.offset_bottom = -170
+	rune_timing_game.hide()
+	hud.add_child(rune_timing_game)
 	var constellation_gate := Button.new()
 	constellation_gate.flat = true
 	constellation_gate.tooltip_text = "開啟宇宙星圖"
@@ -143,6 +145,9 @@ func refresh() -> void:
 	rate_label.text = "✧  +%s/s" % NumberFormatter.format(rates.karma)
 	queue_label.text = "◌  " + NumberFormatter.format(state.souls)
 	var round := GameEngine.get_constellation_round()
+	# 首局不需要節印，不能讓尚未解鎖的舊判定視覺遮住生成主畫面。
+	if is_instance_valid(rune_timing_game):
+		rune_timing_game.visible = GameEngine.requires_fate_alignment() and not round.selected.is_empty() and not bool(round.card_revealed)
 	round_label.text = "命運窗 %.0f 秒    節印 %d / %d" % [float(round.seconds), int(round.active_rune), int(round.max_runes)] if GameEngine.requires_fate_alignment() else "初次引魂：翻牌後靈魂將直接落下"
 	var next_unlock: Dictionary = round.next_rune_unlock
 	rune_unlock_button.visible = GameEngine.requires_fate_alignment() and not next_unlock.is_empty()
