@@ -33,6 +33,7 @@ var card_bar: HBoxContainer
 var _ui_elapsed := 0.0
 var _drop_active := false
 var _card_reveal_pending := false
+var _card_signature := ""
 
 func _ready() -> void:
 	_build_interface()
@@ -152,6 +153,21 @@ func refresh() -> void:
 	if _card_reveal_pending:
 		timing_status.text = "命運牌正在揭示…"
 		return
+	var card_signature := _card_signature_for(round)
+	if card_signature != _card_signature:
+		_card_signature = card_signature
+		_rebuild_card_bar(round)
+	var status := "選擇一張命運牌" if round.selected.is_empty() else ("確認本局規則" if bool(round.card_revealed) else ("SPACE — 鎖定浮文／推送靈魂" if GameEngine.requires_fate_alignment() else "命運牌已確認，靈魂等待掉落"))
+	if GameEngine.can_use_auto_ritual(): status += "  ·  A 自動儀式：%s" % ("開" if bool(state.settings.get("auto_ritual", false)) else "關")
+	timing_status.text = status
+
+func _card_signature_for(round: Dictionary) -> String:
+	var ids: Array[String] = []
+	for card: Dictionary in round.cards:
+		ids.append(String(card.get("id", "")))
+	return "%s|%s|%s" % [",".join(ids), String(round.selected.get("id", "")), str(bool(round.card_revealed))]
+
+func _rebuild_card_bar(round: Dictionary) -> void:
 	for child in card_bar.get_children(): child.queue_free()
 	for index in round.cards.size():
 		var card: Dictionary = round.cards[index]
@@ -170,9 +186,6 @@ func refresh() -> void:
 			button.modulate = Color("fff0a5")
 		button.pressed.connect(_choose_fate_card.bind(index, button))
 		card_bar.add_child(button)
-	var status := "選擇一張命運牌" if round.selected.is_empty() else ("確認本局規則" if bool(round.card_revealed) else ("SPACE — 鎖定浮文／推送靈魂" if GameEngine.requires_fate_alignment() else "命運牌已確認，靈魂等待掉落"))
-	if GameEngine.can_use_auto_ritual(): status += "  ·  A 自動儀式：%s" % ("開" if bool(state.settings.get("auto_ritual", false)) else "關")
-	timing_status.text = status
 
 func _card_texture(card_id: String) -> Texture2D:
 	match card_id:

@@ -43,6 +43,8 @@ func _test_card_reveal_survives_ui_refresh() -> void:
 	add_child(screen)
 	await get_tree().process_frame
 	var card := screen.card_bar.get_child(0) as TextureButton
+	screen.refresh()
+	_check(screen.card_bar.get_child(0) == card, "A stable round must not recreate its card controls on a resource refresh")
 	screen._choose_fate_card(0, card)
 	await get_tree().create_timer(0.12).timeout
 	screen.refresh()
