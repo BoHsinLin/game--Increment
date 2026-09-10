@@ -1,6 +1,7 @@
 extends Control
 
 const ASTRAEA_ART := preload("res://assets/art/characters/deity_astraea_v1.png")
+const UI_NAVIGATION := preload("res://src/ui/main/ui_navigation.gd")
 const ASTRAEA_GOLDEN_VOW_ART := preload("res://assets/art/characters/deity_astraea_golden_vow_v1.png")
 const ASTRAEA_VOID_ECLIPSE_ART := preload("res://assets/art/characters/deity_astraea_void_eclipse_v1.png")
 const SELENE_ART := preload("res://assets/art/characters/deity_selene_v1.png")
@@ -15,6 +16,7 @@ var _art: TextureRect
 var _deity_row: HBoxContainer
 
 func _ready() -> void:
+	UI_NAVIGATION.add_back_button(self)
 	_art = TextureRect.new()
 	_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED

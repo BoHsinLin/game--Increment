@@ -1,6 +1,7 @@
 extends Control
 
 const BACKDROP := preload("res://assets/art/soul_fall_judgment_v2.png")
+const UI_NAVIGATION := preload("res://src/ui/main/ui_navigation.gd")
 const SOUL_SHEET := preload("res://assets/art/souls/soul_codex_sheet_v1.png")
 
 var _list: VBoxContainer
@@ -10,6 +11,7 @@ var _selected_inventory_index := -1
 var _portrait: TextureRect
 
 func _ready() -> void:
+	UI_NAVIGATION.add_back_button(self)
 	var art := TextureRect.new()
 	art.texture = BACKDROP
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

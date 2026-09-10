@@ -1,6 +1,7 @@
 extends Control
 
 const BACKDROP := preload("res://assets/art/cosmic_pachinko_observatory_v1.png")
+const UI_NAVIGATION := preload("res://src/ui/main/ui_navigation.gd")
 
 var _offers: VBoxContainer
 var _clock: Label
@@ -9,6 +10,7 @@ var _selected: Dictionary = {}
 var _buy: Button
 
 func _ready() -> void:
+	UI_NAVIGATION.add_back_button(self)
 	var art := TextureRect.new()
 	art.texture = BACKDROP
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

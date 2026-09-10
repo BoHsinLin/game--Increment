@@ -114,6 +114,8 @@ func _test_interface_scene_smoke() -> void:
 		add_child(screen)
 		await get_tree().process_frame
 		_check(screen.is_inside_tree(), "Interface scene must load: %s" % scene_path)
+		if scene_path != "res://scenes/landing.tscn" and scene_path != "res://scenes/main_game.tscn":
+			_check(is_instance_valid(screen.get_node_or_null("BackToMainButton")), "Interface scene must provide a visible return button: %s" % scene_path)
 		screen.queue_free()
 		await get_tree().process_frame
 

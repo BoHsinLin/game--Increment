@@ -1,12 +1,14 @@
 extends Control
 
 const CONSTELLATION_ART := preload("res://assets/art/cosmic_skill_constellation_v1.png")
+const UI_NAVIGATION := preload("res://src/ui/main/ui_navigation.gd")
 
 var _detail: Label
 var _selected: Dictionary = {}
 var _purchase: Button
 
 func _ready() -> void:
+	UI_NAVIGATION.add_back_button(self)
 	var art := TextureRect.new()
 	art.texture = CONSTELLATION_ART
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

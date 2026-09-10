@@ -1,6 +1,7 @@
 extends Control
 
 const BACKDROP := preload("res://assets/art/cosmic_skill_constellation_v1.png")
+const UI_NAVIGATION := preload("res://src/ui/main/ui_navigation.gd")
 const CARD_BACK := preload("res://assets/art/cards/card_mystery_v1.png")
 const CARD_STARFALL := preload("res://assets/art/cards/card_starfall_v1.png")
 const CARD_TIDE := preload("res://assets/art/cards/card_tide_v1.png")
@@ -24,6 +25,7 @@ var _purchase: Button
 var _selected: Dictionary = {}
 
 func _ready() -> void:
+	UI_NAVIGATION.add_back_button(self)
 	var backdrop := TextureRect.new()
 	backdrop.texture = BACKDROP
 	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

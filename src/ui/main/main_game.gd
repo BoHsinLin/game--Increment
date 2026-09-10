@@ -141,9 +141,9 @@ func _metric(parent: Container, glyph: String) -> Label:
 func _build_navigation(parent: Control) -> void:
 	# 對齊生成主畫面上方的圓形徽記；每個系統都有可見、可點選的入口。
 	var navigation := HBoxContainer.new()
-	navigation.position = Vector2(890, 20)
-	navigation.size = Vector2(590, 54)
-	navigation.add_theme_constant_override("separation", 9)
+	navigation.position = Vector2(850, 12)
+	navigation.size = Vector2(690, 76)
+	navigation.add_theme_constant_override("separation", 12)
 	parent.add_child(navigation)
 	_add_nav_icon(navigation, 0, "宇宙星圖", "res://scenes/skill_constellation.tscn")
 	_add_nav_icon(navigation, 1, "命運藏庫", "res://scenes/fate_collection.tscn")
@@ -158,7 +158,7 @@ func _add_nav_icon(parent: Container, index: int, label: String, scene_path: Str
 	button.texture_normal = _navigation_emblem(index)
 	button.texture_hover = button.texture_normal
 	button.tooltip_text = label
-	button.custom_minimum_size = Vector2(58, 54)
+	button.custom_minimum_size = Vector2(84, 76)
 	button.ignore_texture_size = true
 	button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
