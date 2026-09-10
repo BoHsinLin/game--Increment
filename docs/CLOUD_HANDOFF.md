@@ -22,7 +22,7 @@ Godot_v4.7.2-stable_win64.exe --headless --path . --script res://tests/run_tests
 Godot_v4.7.2-stable_win64.exe --headless --path . --scene res://tests/integration_test.tscn
 ```
 
-核心經濟與整局流程測試通過；後者以完整 Autoload 驗證首局翻牌直落、重生節印、彈珠回放和限定商店售罄。Windows 根憑證存取訊息是本機 Godot 環境警告，非遊戲腳本錯誤。
+核心經濟與整局流程測試通過；後者以完整 Autoload 驗證首局翻牌直落、重生節印、彈珠回放和限定商店售罄，也驗證連續三輪「翻牌 → 規則確認 → 掉落 → 結算 → 下一輪」可完整執行。Windows 根憑證存取訊息是本機 Godot 環境警告，非遊戲腳本錯誤。
 
 ## 雲端接續優先順序
 
