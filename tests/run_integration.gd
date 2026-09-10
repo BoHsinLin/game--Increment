@@ -1,5 +1,7 @@
 extends Node
 
+const MAIN_GAME_SCRIPT := preload("res://src/ui/main/main_game.gd")
+
 var failures := 0
 var _original_state: Dictionary
 var _original_shop_items: Array
@@ -9,6 +11,7 @@ func _ready() -> void:
 	_original_state = GameEngine.state.duplicate(true)
 	_original_shop_items = GameEngine.special_shop_items.duplicate(true)
 	_test_first_soul_round()
+	await _test_card_reveal_survives_ui_refresh()
 	_test_reincarnated_alignment_round()
 	_test_limited_shop_cycle()
 	GameEngine.state = _original_state
@@ -33,6 +36,19 @@ func _test_first_soul_round() -> void:
 	_check(String(result.result) == "launched", "First-soul flow must launch immediately after card confirmation")
 	_check(float(GameEngine.state.karma) > before_karma, "First-soul flow must grant karma")
 	_check(result.get("peg_path", []).size() == 14 and result.get("peg_impacts", []).size() == 12, "A launched soul must contain a complete peg replay")
+
+func _test_card_reveal_survives_ui_refresh() -> void:
+	_fresh_round()
+	var screen: Control = MAIN_GAME_SCRIPT.new()
+	add_child(screen)
+	await get_tree().process_frame
+	var card := screen.card_bar.get_child(0) as TextureButton
+	screen._choose_fate_card(0, card)
+	await get_tree().create_timer(0.12).timeout
+	screen.refresh()
+	await get_tree().create_timer(0.42).timeout
+	_check(not GameEngine.selected_fate_card.is_empty(), "A card reveal must survive a UI refresh and select its rule")
+	screen.queue_free()
 
 func _test_reincarnated_alignment_round() -> void:
 	_fresh_round()

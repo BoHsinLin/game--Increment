@@ -32,6 +32,7 @@ var rune_unlock_button: Button
 var card_bar: HBoxContainer
 var _ui_elapsed := 0.0
 var _drop_active := false
+var _card_reveal_pending := false
 
 func _ready() -> void:
 	_build_interface()
@@ -147,6 +148,10 @@ func refresh() -> void:
 	if rune_unlock_button.visible:
 		rune_unlock_button.text = "解鎖浮文 +1  ◇%d" % int(next_unlock.cost_destiny_seals)
 		rune_unlock_button.disabled = int(state.destiny_seals) < int(next_unlock.cost_destiny_seals)
+	# UI 每 0.1 秒刷新資源；翻牌期間不能重建卡片，否則 Tween 會被 queue_free 中斷。
+	if _card_reveal_pending:
+		timing_status.text = "命運牌正在揭示…"
+		return
 	for child in card_bar.get_children(): child.queue_free()
 	for index in round.cards.size():
 		var card: Dictionary = round.cards[index]
@@ -196,6 +201,8 @@ func _expansion_texture(sheet: Texture2D, index: int) -> Texture2D:
 	return texture
 
 func _choose_fate_card(index: int, card_button: TextureButton) -> void:
+	if _card_reveal_pending: return
+	_card_reveal_pending = true
 	for card_control in card_bar.get_children(): card_control.disabled = true
 	var choice: Dictionary = GameEngine.get_constellation_round().cards[index]
 	var flip := create_tween()
@@ -206,6 +213,7 @@ func _choose_fate_card(index: int, card_button: TextureButton) -> void:
 	)
 	flip.tween_property(card_button, "scale:x", 1.0, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	await flip.finished
+	_card_reveal_pending = false
 	GameEngine.select_fate_card(index)
 	GameEngine.set_onboarding_step(2)
 	_show_card_reveal(choice)
