@@ -55,5 +55,5 @@ func _test_replayable_peg_simulation() -> void:
 	var first := ConstellationSimulator.simulate(42, 0.12, -0.08, 0.81)
 	var replay := ConstellationSimulator.simulate(42, 0.12, -0.08, 0.81)
 	_check(int(first.lane) == int(replay.lane), "A peg simulation seed must replay to the same gate")
-	_check(first.path == replay.path and first.impacts.size() == 12, "A peg simulation must preserve its complete impact path")
+	_check(first.path == replay.path and first.impacts.size() == ConstellationSimulator.PEG_ROWS.size(), "A peg simulation must preserve its complete impact path")
 	_check(int(first.lane) >= 0 and int(first.lane) <= 2, "A peg simulation must resolve to one of three gates")

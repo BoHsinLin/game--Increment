@@ -109,6 +109,7 @@ func _build_interface() -> void:
 	constellation_gate.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	constellation_gate.pressed.connect(_open_constellation)
 	hud.add_child(constellation_gate)
+	_build_navigation(hud)
 
 	card_bar = HBoxContainer.new()
 	card_bar.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
@@ -135,6 +136,33 @@ func _metric(parent: Container, glyph: String) -> Label:
 	value.add_theme_color_override("font_color", Color("eef6ff"))
 	parent.add_child(value)
 	return value
+
+func _build_navigation(parent: Control) -> void:
+	# 對齊生成主畫面上方的圓形徽記；每個系統都有可見、可點選的入口。
+	var navigation := HBoxContainer.new()
+	navigation.position = Vector2(890, 20)
+	navigation.size = Vector2(590, 54)
+	navigation.add_theme_constant_override("separation", 9)
+	parent.add_child(navigation)
+	_add_nav_icon(navigation, "✦", "宇宙星圖", "res://scenes/skill_constellation.tscn")
+	_add_nav_icon(navigation, "▣", "命運藏庫", "res://scenes/fate_collection.tscn")
+	_add_nav_icon(navigation, "◈", "靈魂圖鑑", "res://scenes/soul_codex.tscn")
+	_add_nav_icon(navigation, "♛", "神祉衣櫥", "res://scenes/deity_wardrobe.tscn")
+	_add_nav_icon(navigation, "✧", "星界特殊商店", "res://scenes/special_shop.tscn")
+	_add_nav_icon(navigation, "☾", "每週挑戰", "res://scenes/weekly_challenge.tscn")
+	_add_nav_icon(navigation, "⚙", "設定", "res://scenes/settings_screen.tscn")
+
+func _add_nav_icon(parent: Container, glyph: String, label: String, scene_path: String) -> void:
+	var button := Button.new()
+	button.text = glyph
+	button.tooltip_text = label
+	button.custom_minimum_size = Vector2(52, 48)
+	button.flat = true
+	button.add_theme_font_size_override("font_size", 25)
+	button.add_theme_color_override("font_color", Color("f2d681"))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.pressed.connect(func() -> void: get_tree().change_scene_to_file(scene_path))
+	parent.add_child(button)
 
 func refresh() -> void:
 	if not is_instance_valid(karma_label): return

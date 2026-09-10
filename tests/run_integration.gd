@@ -40,7 +40,7 @@ func _test_first_soul_round() -> void:
 	var result := GameEngine.confirm_revealed_card()
 	_check(String(result.result) == "launched", "First-soul flow must launch immediately after card confirmation")
 	_check(float(GameEngine.state.karma) > before_karma, "First-soul flow must grant karma")
-	_check(result.get("peg_path", []).size() == 14 and result.get("peg_impacts", []).size() == 12, "A launched soul must contain a complete peg replay")
+	_check(result.get("peg_path", []).size() == 14 and result.get("peg_impacts", []).size() == ConstellationSimulator.PEG_ROWS.size(), "A launched soul must contain a complete peg replay")
 
 func _test_rune_overlay_visibility() -> void:
 	_fresh_round()

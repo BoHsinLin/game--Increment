@@ -38,16 +38,16 @@ func _draw() -> void:
 	# 光點與衝擊波疊在生成彈盤上，讓路徑的結果可讀。
 	for point in _impacts:
 		var impact := point * size
-		draw_circle(impact, 9.0, Color("f2c663", 0.16))
-		draw_circle(impact, 3.0, Color("f2c663", 0.75))
+		draw_circle(impact, 13.0, Color("f2c663", 0.10))
+		draw_circle(impact, 4.0, Color("fff0b1", 0.80))
 	var normalized := _position_at(clampf(_elapsed / DROP_DURATION, 0.0, 1.0))
 	var orb := normalized * size
 	for trail in 5:
-		draw_circle(orb - Vector2(0, float(trail + 1) * 11.0), 10.0 - float(trail) * 1.5, Color(0.31, 0.92, 0.76, 0.08 + float(trail) * 0.035))
+		draw_circle(orb - Vector2(0, float(trail + 1) * 8.0), 10.0 - float(trail) * 1.5, Color(0.31, 0.92, 0.76, 0.08 + float(trail) * 0.035))
 	draw_circle(orb, 15.0, Color("73ffe0", 0.25))
 	draw_circle(orb, 9.0, Color("e6fff7"))
 	if _elapsed > DROP_DURATION * 0.84:
-		draw_circle(_route.back() * size, 38.0, Color("f2c663", 0.16))
+		draw_circle(_route.back() * size, 46.0, Color("f2c663", 0.19))
 
 func _position_at(progress: float) -> Vector2:
 	var scaled := progress * float(_route.size() - 1)
