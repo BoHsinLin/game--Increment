@@ -5,6 +5,7 @@ const SETTLEMENT_OVERLAY_SCRIPT := preload("res://src/ui/main/settlement_overlay
 const CARD_REVEAL_OVERLAY_SCRIPT := preload("res://src/ui/main/card_reveal_overlay.gd")
 const SOUL_DROP_OVERLAY_SCRIPT := preload("res://src/ui/main/soul_drop_overlay.gd")
 const GAMEPLAY_HUD := preload("res://assets/art/cosmic_gameplay_hud_v1.png")
+const NAVIGATION_EMBLEMS := preload("res://assets/art/ui/navigation_emblems_v1.png")
 const CARD_STARFALL := preload("res://assets/art/cards/card_starfall_v1.png")
 const CARD_TIDE := preload("res://assets/art/cards/card_tide_v1.png")
 const CARD_COMET := preload("res://assets/art/cards/card_comet_v1.png")
@@ -144,25 +145,33 @@ func _build_navigation(parent: Control) -> void:
 	navigation.size = Vector2(590, 54)
 	navigation.add_theme_constant_override("separation", 9)
 	parent.add_child(navigation)
-	_add_nav_icon(navigation, "✦", "宇宙星圖", "res://scenes/skill_constellation.tscn")
-	_add_nav_icon(navigation, "▣", "命運藏庫", "res://scenes/fate_collection.tscn")
-	_add_nav_icon(navigation, "◈", "靈魂圖鑑", "res://scenes/soul_codex.tscn")
-	_add_nav_icon(navigation, "♛", "神祉衣櫥", "res://scenes/deity_wardrobe.tscn")
-	_add_nav_icon(navigation, "✧", "星界特殊商店", "res://scenes/special_shop.tscn")
-	_add_nav_icon(navigation, "☾", "每週挑戰", "res://scenes/weekly_challenge.tscn")
-	_add_nav_icon(navigation, "⚙", "設定", "res://scenes/settings_screen.tscn")
+	_add_nav_icon(navigation, 0, "宇宙星圖", "res://scenes/skill_constellation.tscn")
+	_add_nav_icon(navigation, 1, "命運藏庫", "res://scenes/fate_collection.tscn")
+	_add_nav_icon(navigation, 2, "靈魂圖鑑", "res://scenes/soul_codex.tscn")
+	_add_nav_icon(navigation, 3, "神祉衣櫥", "res://scenes/deity_wardrobe.tscn")
+	_add_nav_icon(navigation, 4, "星界特殊商店", "res://scenes/special_shop.tscn")
+	_add_nav_icon(navigation, 5, "每週挑戰", "res://scenes/weekly_challenge.tscn")
+	_add_nav_icon(navigation, 6, "設定", "res://scenes/settings_screen.tscn")
 
-func _add_nav_icon(parent: Container, glyph: String, label: String, scene_path: String) -> void:
-	var button := Button.new()
-	button.text = glyph
+func _add_nav_icon(parent: Container, index: int, label: String, scene_path: String) -> void:
+	var button := TextureButton.new()
+	button.texture_normal = _navigation_emblem(index)
+	button.texture_hover = button.texture_normal
 	button.tooltip_text = label
-	button.custom_minimum_size = Vector2(52, 48)
-	button.flat = true
-	button.add_theme_font_size_override("font_size", 25)
-	button.add_theme_color_override("font_color", Color("f2d681"))
+	button.custom_minimum_size = Vector2(58, 54)
+	button.ignore_texture_size = true
+	button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.pressed.connect(func() -> void: get_tree().change_scene_to_file(scene_path))
 	parent.add_child(button)
+
+func _navigation_emblem(index: int) -> Texture2D:
+	var texture := AtlasTexture.new()
+	var sheet_size := NAVIGATION_EMBLEMS.get_size()
+	texture.atlas = NAVIGATION_EMBLEMS
+	# 生成圖集是七個等寬圖格；裁掉上下留白，讓徽記在背景圓槽中清晰可讀。
+	texture.region = Rect2(float(index) * sheet_size.x / 7.0, sheet_size.y * 0.21, sheet_size.x / 7.0, sheet_size.y * 0.56)
+	return texture
 
 func refresh() -> void:
 	if not is_instance_valid(karma_label): return
