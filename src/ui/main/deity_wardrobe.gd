@@ -1,6 +1,8 @@
 extends Control
 
 const ASTRAEA_ART := preload("res://assets/art/characters/deity_astraea_v1.png")
+const ASTRAEA_GOLDEN_VOW_ART := preload("res://assets/art/characters/deity_astraea_golden_vow_v1.png")
+const ASTRAEA_VOID_ECLIPSE_ART := preload("res://assets/art/characters/deity_astraea_void_eclipse_v1.png")
 const SELENE_ART := preload("res://assets/art/characters/deity_selene_v1.png")
 const ORPHEON_ART := preload("res://assets/art/characters/deity_orpheon_v1.png")
 
@@ -119,7 +121,17 @@ func _deity_art(deity_id: String) -> Texture2D:
 	match deity_id:
 		"selene": return SELENE_ART
 		"orpheon": return ORPHEON_ART
-		_: return ASTRAEA_ART
+		_:
+			var equipped := [
+				GameEngine.get_equipped_cosmetic("astraea", "頭飾"),
+				GameEngine.get_equipped_cosmetic("astraea", "斗篷"),
+				GameEngine.get_equipped_cosmetic("astraea", "星盤")
+			]
+			if equipped.any(func(cosmetic_id: String) -> bool: return cosmetic_id in ["void_veil", "eclipse_raiment", "crown_chart"]):
+				return ASTRAEA_VOID_ECLIPSE_ART
+			if equipped.any(func(cosmetic_id: String) -> bool: return cosmetic_id in ["moon_crown", "golden_vow_cloak", "prism_chart"]):
+				return ASTRAEA_GOLDEN_VOW_ART
+			return ASTRAEA_ART
 
 func _can_afford(cosmetic: Dictionary) -> bool:
 	match String(cosmetic.currency):
