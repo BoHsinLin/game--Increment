@@ -6,6 +6,7 @@ const CARD_REVEAL_OVERLAY_SCRIPT := preload("res://src/ui/main/card_reveal_overl
 const SOUL_DROP_OVERLAY_SCRIPT := preload("res://src/ui/main/soul_drop_overlay.gd")
 const GAMEPLAY_HUD := preload("res://assets/art/cosmic_gameplay_hud_v1.png")
 const NAVIGATION_EMBLEMS := preload("res://assets/art/ui/navigation_emblems_v1.png")
+const FATE_ROULETTE := preload("res://assets/art/ui/fate_roulette_v1.png")
 const CARD_STARFALL := preload("res://assets/art/cards/card_starfall_v1.png")
 const CARD_TIDE := preload("res://assets/art/cards/card_tide_v1.png")
 const CARD_COMET := preload("res://assets/art/cards/card_comet_v1.png")
@@ -32,10 +33,13 @@ var round_label: Label
 var rune_unlock_button: Button
 var card_bar: HBoxContainer
 var rune_timing_game: Control
+var roulette_button: TextureButton
+var roulette_caption: Label
 var _ui_elapsed := 0.0
 var _drop_active := false
 var _card_reveal_pending := false
 var _card_signature := ""
+var _roulette_spinning := false
 
 func _ready() -> void:
 	_build_interface()
@@ -119,6 +123,27 @@ func _build_interface() -> void:
 	card_bar.add_theme_constant_override("separation", 14)
 	hud.add_child(card_bar)
 
+	roulette_button = TextureButton.new()
+	roulette_button.texture_normal = FATE_ROULETTE
+	roulette_button.texture_hover = FATE_ROULETTE
+	roulette_button.ignore_texture_size = true
+	roulette_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	roulette_button.position = Vector2(36, 665)
+	roulette_button.size = Vector2(190, 190)
+	roulette_button.pivot_offset = Vector2(95, 95)
+	roulette_button.tooltip_text = "命運轉盤：隨機抽出一張已收藏的命運牌"
+	roulette_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	roulette_button.pressed.connect(_spin_fate_roulette)
+	hud.add_child(roulette_button)
+	roulette_caption = Label.new()
+	roulette_caption.position = Vector2(34, 850)
+	roulette_caption.size = Vector2(205, 30)
+	roulette_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	roulette_caption.add_theme_font_size_override("font_size", 14)
+	roulette_caption.add_theme_color_override("font_color", Color("f2d681"))
+	roulette_caption.text = "R  命運轉盤抽獎"
+	hud.add_child(roulette_caption)
+
 	timing_status = Label.new()
 	timing_status.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	timing_status.position = Vector2(-270, -27)
@@ -185,6 +210,10 @@ func refresh() -> void:
 	# 首局不需要節印，不能讓尚未解鎖的舊判定視覺遮住生成主畫面。
 	if is_instance_valid(rune_timing_game):
 		rune_timing_game.visible = GameEngine.requires_fate_alignment() and not round.selected.is_empty() and not bool(round.card_revealed)
+	if is_instance_valid(roulette_button):
+		roulette_button.visible = round.selected.is_empty() or _roulette_spinning
+		roulette_button.disabled = _roulette_spinning or not round.selected.is_empty()
+		roulette_caption.visible = roulette_button.visible
 	round_label.text = "命運窗 %.0f 秒    節印 %d / %d" % [float(round.seconds), int(round.active_rune), int(round.max_runes)] if GameEngine.requires_fate_alignment() else "初次引魂：翻牌後靈魂將直接落下"
 	var next_unlock: Dictionary = round.next_rune_unlock
 	rune_unlock_button.visible = GameEngine.requires_fate_alignment() and not next_unlock.is_empty()
@@ -273,6 +302,21 @@ func _choose_fate_card(index: int, card_button: TextureButton) -> void:
 	GameEngine.set_onboarding_step(2)
 	_show_card_reveal(choice)
 
+func _spin_fate_roulette() -> void:
+	if _roulette_spinning or _card_reveal_pending or not GameEngine.selected_fate_card.is_empty(): return
+	_roulette_spinning = true
+	var result := GameEngine.spin_fate_roulette()
+	if String(result.result) != "drawn":
+		_roulette_spinning = false
+		return
+	var spin := create_tween()
+	spin.tween_property(roulette_button, "rotation", roulette_button.rotation + TAU * 5.0, 0.92).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+	await spin.finished
+	roulette_button.rotation = fmod(roulette_button.rotation, TAU)
+	_roulette_spinning = false
+	GameEngine.set_onboarding_step(2)
+	_show_card_reveal(result.card)
+
 func _lock_or_launch() -> void:
 	if _drop_active: return
 	var result := GameEngine.lock_active_rune()
@@ -322,6 +366,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		var auto_result := GameEngine.toggle_auto_ritual()
 		if String(auto_result.result) == "locked": _show_toast("需要解鎖「後世重啟」星圖節點。", "minor")
 		else: _show_toast("自動命運儀式：%s（收益較低）" % ("開啟" if String(auto_result.result) == "enabled" else "關閉"), "normal")
+		get_viewport().set_input_as_handled()
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
+		_spin_fate_roulette()
 		get_viewport().set_input_as_handled()
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_SPACE:

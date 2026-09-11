@@ -13,6 +13,8 @@ func _ready() -> void:
 	_original_state = GameEngine.state.duplicate(true)
 	_original_shop_items = GameEngine.special_shop_items.duplicate(true)
 	_test_first_soul_round()
+	_test_fate_roulette_draw()
+	await _test_roulette_ui_entry()
 	await _test_rune_overlay_visibility()
 	await _test_card_reveal_survives_ui_refresh()
 	await _test_three_complete_visible_rounds()
@@ -41,6 +43,26 @@ func _test_first_soul_round() -> void:
 	_check(String(result.result) == "launched", "First-soul flow must launch immediately after card confirmation")
 	_check(float(GameEngine.state.karma) > before_karma, "First-soul flow must grant karma")
 	_check(result.get("peg_path", []).size() == 14 and result.get("peg_impacts", []).size() == ConstellationSimulator.PEG_ROWS.size(), "A launched soul must contain a complete peg replay")
+
+func _test_fate_roulette_draw() -> void:
+	_fresh_round()
+	var result := GameEngine.spin_fate_roulette()
+	_check(String(result.result) == "drawn", "Fate roulette must draw one owned card")
+	_check(String(result.card.id) in GameEngine.state.owned_fate_cards, "Fate roulette must only draw from permanent card collection")
+	_check(bool(GameEngine.card_revealed), "Fate roulette must still reveal the drawn rule before a soul drops")
+
+func _test_roulette_ui_entry() -> void:
+	_fresh_round()
+	var screen: Control = MAIN_GAME_SCRIPT.new()
+	add_child(screen)
+	await get_tree().process_frame
+	_check(screen.roulette_button.visible and not screen.roulette_button.disabled, "Main screen must expose a clickable fate roulette")
+	screen._spin_fate_roulette()
+	await get_tree().create_timer(1.05).timeout
+	var reveal := _child_of_type(screen, CARD_REVEAL_SCRIPT)
+	_check(is_instance_valid(reveal), "Fate roulette must open the same rule-reveal step as card selection")
+	screen.queue_free()
+	await get_tree().process_frame
 
 func _test_rune_overlay_visibility() -> void:
 	_fresh_round()

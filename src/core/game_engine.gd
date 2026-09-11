@@ -137,6 +137,15 @@ func select_fate_card(index: int) -> void:
 	card_revealed = true
 	EventBus.state_changed.emit()
 
+func spin_fate_roulette() -> Dictionary:
+	if not selected_fate_card.is_empty(): return {"result": "not_ready"}
+	var owned_cards: Array = fate_cards.filter(func(card: Dictionary) -> bool: return card.id in state.owned_fate_cards)
+	if owned_cards.is_empty(): return {"result": "not_ready"}
+	selected_fate_card = owned_cards[_judgement_rng.randi_range(0, owned_cards.size() - 1)]
+	card_revealed = true
+	EventBus.state_changed.emit()
+	return {"result": "drawn", "card": selected_fate_card}
+
 func confirm_revealed_card() -> Dictionary:
 	if selected_fate_card.is_empty() or not card_revealed: return {"result": "not_ready"}
 	card_revealed = false
